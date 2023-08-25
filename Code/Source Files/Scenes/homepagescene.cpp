@@ -1,15 +1,16 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include <SFML/Audio.hpp>
+
+#include <chrono>
+#include <thread>
 
 #include "game.h"
 
-using namespace std;
 using namespace sf;
 
-
-inline void runHomePageScene(int *scene, RenderWindow *window, Game *game)
+inline void runHomePageScene(int* scene, RenderWindow* window, Game* game)
 {
-    /* Loading the Inika font and if failed to do so close the program */
+    /* Loading the Inika font and if failed to close the program */
     Font font;
     if (!font.loadFromFile("Assets/Fonts/Gloria_Hallelujah/GloriaHallelujah-Regular.ttf"))
     {
@@ -18,7 +19,7 @@ inline void runHomePageScene(int *scene, RenderWindow *window, Game *game)
         return;
     }
 
-    /* Loading the background and if failed to do so close the program */
+    /* Loading the background and if failed to close the program */
     Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("Assets/Backgrounds/Home_Screen_Background.jpg"))
     {
@@ -26,6 +27,16 @@ inline void runHomePageScene(int *scene, RenderWindow *window, Game *game)
         *scene = -1;
         return;
     }
+
+    /* Loading the sound buffers and if failed to close the program*/
+    SoundBuffer chalkeraseBuffer;
+    if (!chalkeraseBuffer.loadFromFile("Assets/Sound/Chalk_Eraser.wav"))
+    {
+        cout << "Error loading buffer sound\n";
+        *scene = -1;
+        return;
+    }
+
 
     /* Beginning of declaring shapes and texts to use */
     RectangleShape background(Vector2f(800, 600));
@@ -35,6 +46,11 @@ inline void runHomePageScene(int *scene, RenderWindow *window, Game *game)
     Text startGameText("Start Game", font, 40);
     startGameText.setPosition(280, 374);
 
+    Sound chalkerase;
+    chalkerase.setBuffer(chalkeraseBuffer);
+    
+
+    /* The beginning of the display what'll be in the window */
     while (window->isOpen())
     {
         Event event;
@@ -50,7 +66,9 @@ inline void runHomePageScene(int *scene, RenderWindow *window, Game *game)
             {
                 if (startGameText.getGlobalBounds().contains(Mouse::getPosition(*window).x, Mouse::getPosition(*window).y))
                 {
-                    *scene = -1;
+                    chalkerase.play();
+                    this_thread::sleep_for(chrono::milliseconds(375));
+                    *scene = 1;
                     return;
                 }
             }

@@ -1,3 +1,7 @@
+#ifndef GAME_H
+#define GAME_H
+
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -21,4 +25,8 @@ public:
 	bool checkWin(char);
 	void placeMove(char, int, int);
 	bool isValidMove(int, int);
+	void incrementMove();
+	int getMove();
 };
+
+#endif

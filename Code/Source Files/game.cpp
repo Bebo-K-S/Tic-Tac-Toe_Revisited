@@ -42,3 +42,13 @@ bool Game::isValidMove(int row, int column)
 		return (true);
 	return (false);
 }
+
+void Game::incrementMove()
+{
+	moves += 1;
+}
+
+int Game::getMove()
+{
+	return moves;
+}
