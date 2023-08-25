@@ -27,6 +27,7 @@ public:
 	bool isValidMove(int, int);
 	void incrementMove();
 	int getMove();
+	bool isXsTurn();
 };
 
 #endif
