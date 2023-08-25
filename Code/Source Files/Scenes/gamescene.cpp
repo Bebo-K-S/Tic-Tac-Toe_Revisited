@@ -40,10 +40,15 @@ inline void runGameScene(int *scene, RenderWindow *window, Game *game)
     background.setTexture(&backgroundTexture);
     background.setPosition(Vector2f(0, 0));
 
+    /* Invisable rectangles to make it easier to recognize the clicks */
+    RectangleShape ulRec;
+    ulRec.setSize(Vector2f(115, 86));
+    ulRec.setPosition(Vector2f(200, 190));
 
 
+    /* The text variables that'll house the X or O */
     Text ul("", symbolFont, 55);
-    ul.setPosition(235, 200);
+    ul.setPosition(238, 195);
 
 
     while (window->isOpen())
@@ -59,25 +64,30 @@ inline void runGameScene(int *scene, RenderWindow *window, Game *game)
 
             if (event.type == Event::MouseButtonPressed)
             {
-                if (Mouse::getPosition(*window).x >= 230 && Mouse::getPosition(*window).x <= 350)
-                    if (Mouse::getPosition(*window).y >= 350 && Mouse::getPosition(*window).y <= 310) // 230x210-350x310 upper left
+                if (ulRec.getGlobalBounds().contains(Mouse::getPosition(*window).x, Mouse::getPosition(*window).y)) // 230x210-350x310 upper left
+                {
+                    cout << "Clicked on upper box\n";
+                    if (game->isValidMove(0, 0))
                     {
-                        if (game->isValidMove(0, 0))
+                        cout << "Is a valid move\n";
+                        if (game->isXsTurn())
                         {
-                            if (game->getMove() % 2 == 0)
-                            {
-
-                            }
-                            else
-                            {
-
-                            }
+                            game->placeMove('X', 0, 0);
+                            ul.setString("X");
+                            game->incrementMove();
                         }
                         else
                         {
-                            continue;
+                            game->placeMove('O', 0, 0);
+                            ul.setString("O");
+                            game->incrementMove();
                         }
                     }
+                    else
+                    {
+                        continue;
+                    }
+                }
                 /*else if () //350x210-540x310 upper mid
                 {
 
